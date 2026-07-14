@@ -6,5 +6,7 @@
     "name": "Gergő Lencsés"
   },
   "license": "MIT",
+  "homepage": "https://github.com/gergolencses-lab/shared-info-audit",
+  "repository": "https://github.com/gergolencses-lab/shared-info-audit",
   "keywords": ["security", "compliance", "dspm", "oversharing", "sharepoint", "google-workspace", "data-governance"]
 }

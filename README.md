@@ -31,13 +31,11 @@ This plugin does **not** try to detect company-specific secrets. It looks for ge
 **As a Claude Code / Cowork plugin marketplace** (this repo doubles as its own marketplace):
 
 ```
-/plugin marketplace add <owner>/exposure-audit
+/plugin marketplace add gergolencses-lab/shared-info-audit
 /plugin install exposure-audit@lencses-plugins
 ```
 
-Replace `<owner>/exposure-audit` with this repo's actual `owner/repo` path (shown at the top of its GitHub page).
-
-**Manual:** clone or download this repo and copy the folder into your plugins directory, or share it inside a Cowork chat as a `.plugin` zip — recipients can install it with one click.
+**Manual:** clone or download [this repo](https://github.com/gergolencses-lab/shared-info-audit) and copy the folder into your plugins directory, or share it inside a Cowork chat as a `.plugin` zip — recipients can install it with one click.
 
 ## Setup
 
