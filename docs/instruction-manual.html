@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exposure Audit — Instruction Manual</title>
+<style>
+  body { font-family: Helvetica, Arial, sans-serif; color: #1a1f29; font-size: 10.5pt; line-height: 1.5; }
+  h1 { font-size: 26pt; margin: 0 0 4mm 0; }
+  h2 { font-size: 16pt; color: #1a1f29; border-bottom: 2px solid #1a1f29; padding-bottom: 2mm; margin-top: 0; margin-bottom: 5mm; }
+  h3 { font-size: 12.5pt; margin-bottom: 2mm; }
+  p { margin: 0 0 3mm 0; }
+  ul { margin: 0 0 3mm 0; padding-left: 5mm; }
+  li { margin-bottom: 1.5mm; }
+  .eyebrow { color: #2563eb; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 8.5pt; margin-bottom: 2mm; }
+  .subtitle { color: #5b6472; font-size: 12pt; margin-bottom: 6mm; }
+  .meta-line { color: #5b6472; font-size: 9pt; }
+
+  /* Cover */
+  .cover { padding-top: 60mm; text-align: left; }
+  .cover .badge { display: inline-block; background: #1a1f29; color: #fff; font-size: 9pt; padding: 1.5mm 4mm; border-radius: 2mm; margin-bottom: 8mm; }
+
+  /* Callouts */
+  .callout { background: #f4f5f7; border-left: 4px solid #2563eb; padding: 4mm 5mm; margin: 4mm 0; }
+  .callout.warn { border-left-color: #b45309; background: #fdf6ec; }
+  .callout.good { border-left-color: #15803d; background: #f0f9f2; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-title { font-weight: 700; margin-bottom: 1.5mm; }
+
+  /* Pipeline at a glance */
+  .pipeline-glance { display: flex; align-items: stretch; gap: 0; margin: 5mm 0; }
+  .pg-step { flex: 1; background: #f4f5f7; border: 1px solid #d8dadd; border-radius: 2mm; padding: 4mm 3mm; text-align: center; }
+  .pg-num { width: 7mm; height: 7mm; line-height: 7mm; border-radius: 50%; background: #1a1f29; color: #fff; font-weight: 700; font-size: 9.5pt; margin: 0 auto 2.5mm auto; }
+  .pg-name { font-weight: 700; font-size: 9.5pt; margin-bottom: 2mm; }
+  .pg-desc { font-size: 8pt; color: #40474f; margin-bottom: 2mm; line-height: 1.35; }
+  .pg-tag { font-size: 7pt; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+  .pg-arrow { display: flex; align-items: center; justify-content: center; width: 8mm; color: #9aa0a8; font-size: 14pt; }
+
+  /* Architecture diagram (adapted) */
+  .diagram-wrap { margin: 5mm 0; }
+  .diagram-title { text-align: center; font-weight: 700; font-size: 10.5pt; margin-bottom: 4mm; }
+  .arch-sources-block { break-inside: avoid; }
+  .arch-sources { display: flex; gap: 3mm; margin-bottom: 3mm; }
+  .arch-src { flex: 1; background: #f4f5f7; border: 1px solid #d8dadd; border-radius: 2mm; padding: 2.5mm; text-align: center; font-weight: 700; font-size: 8.5pt; }
+  .arch-src .sub { display: block; font-weight: 400; font-size: 7.3pt; color: #5b6472; margin-top: 1mm; }
+  .arch-src.dashed { border-style: dashed; font-weight: 400; color: #5b6472; }
+  .arch-arrow { text-align: center; color: #9aa0a8; font-size: 11pt; margin: 1.5mm 0; }
+  .arch-adapter { text-align: center; font-weight: 700; font-size: 9pt; background: #f4f5f7; border: 1.5px solid #9aa0a8; border-radius: 2mm; padding: 2.5mm; margin: 0 auto 3mm auto; max-width: 140mm; break-inside: avoid; }
+  .arch-adapter .sub { display: block; font-weight: 400; font-size: 7.3pt; color: #5b6472; margin-top: 1mm; }
+  .arch-main { display: flex; gap: 3mm; }
+  .arch-pipeline { flex: 2; display: flex; flex-direction: column; }
+  .arch-skill { background: #f4f5f7; border: 1.5px solid #d8dadd; border-radius: 2mm; padding: 2.5mm 3mm; font-weight: 700; font-size: 8.5pt; }
+  .arch-skill .sub { display: block; font-weight: 400; font-size: 7.3pt; color: #5b6472; margin-top: 1mm; line-height: 1.3; }
+  .arch-skill.dashed { border-style: dashed; border-color: #2563eb; }
+  .arch-skill-arrow { text-align: center; color: #9aa0a8; font-size: 9pt; margin: 1mm 0; }
+  .arch-guard { flex: 1; background: #eef0f2; border: 1px solid #d8dadd; border-radius: 2mm; padding: 2.5mm 3mm; font-size: 7.5pt; color: #40474f; }
+  .arch-guard-title { font-weight: 700; color: #1a1f29; margin-bottom: 1.5mm; font-size: 8pt; }
+  .arch-guard-title .sub { display: block; font-weight: 400; font-style: italic; font-size: 6.8pt; color: #5b6472; margin-top: 0.8mm; }
+  .arch-guard ul { margin: 0; padding-left: 3.5mm; }
+  .arch-guard li { margin-bottom: 1.5mm; }
+  .arch-recipient { text-align: center; font-weight: 700; font-size: 8.5pt; background: #eef0f2; border: 1px solid #d8dadd; border-radius: 2mm; padding: 2.5mm; max-width: 100mm; margin: 3mm auto 0 auto; break-inside: avoid; }
+  .arch-src { break-inside: avoid; }
+  .arch-recipient .sub { display: block; font-weight: 400; font-size: 7.3pt; color: #5b6472; margin-top: 1mm; }
+  .arch-legend { text-align: center; font-size: 7pt; color: #9aa0a8; margin-top: 3mm; }
+
+  /* Skill detail cards — table, not flex, so rows can break across pages in print */
+  table.skills-grid { width: 100%; border-collapse: separate; border-spacing: 3mm; margin: 4mm 0 4mm -3mm; break-inside: auto; }
+  table.skills-grid tr { break-inside: avoid; }
+  .skill-card { width: 50%; background: #fff; border: 1px solid #d8dadd; border-radius: 2mm; padding: 4mm; vertical-align: top; }
+  .skill-card .sc-num { display: inline-block; width: 6mm; height: 6mm; line-height: 6mm; text-align: center; border-radius: 50%; background: #2563eb; color: #fff; font-weight: 700; font-size: 8.5pt; margin-right: 2mm; }
+  .skill-card h3 { display: inline; font-size: 10.5pt; }
+  .skill-card .sc-purpose { font-size: 8.5pt; color: #40474f; margin: 2mm 0 3mm 0; }
+  .skill-card .sc-row { font-size: 7.8pt; margin-bottom: 1.5mm; }
+  .skill-card .sc-row b { color: #1a1f29; }
+  .skill-card .sc-tag { display: inline-block; font-size: 6.8pt; font-weight: 700; text-transform: uppercase; color: #2563eb; margin-top: 1.5mm; }
+  .skill-card.gated { border-style: dashed; border-color: #b45309; }
+  .skill-card.gated .sc-num { background: #b45309; }
+
+  /* Skill 2 branch diagram (adapted) */
+  .branch-wrap { margin: 4mm 0; }
+  .branch-box { background: #f4f5f7; border: 1px solid #d8dadd; border-radius: 2mm; padding: 2.5mm 3mm; text-align: center; font-weight: 700; font-size: 8.5pt; }
+  .branch-box .sub { display: block; font-weight: 400; font-size: 7.3pt; color: #5b6472; margin-top: 1mm; }
+  .branch-decision { border-color: #2563eb; max-width: 130mm; margin: 0 auto; }
+  .branch-row { display: flex; gap: 3mm; margin: 2.5mm 0; }
+  .branch-fork { text-align: center; color: #2563eb; font-weight: 700; font-size: 8pt; margin-bottom: 1mm; }
+  .branch-col { flex: 1; display: flex; flex-direction: column; gap: 1.5mm; }
+  .branch-tag { background: #eef0f2 !important; font-size: 8pt !important; }
+  .branch-merge { text-align: center; font-size: 7pt; color: #9aa0a8; margin: 1.5mm 0; }
+  .branch-final { max-width: 140mm; margin: 0 auto; background: #eef0f2; }
+
+  table.limits-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  table.limits-table td { border-bottom: 1px solid #e3e5e8; padding: 2.5mm 2mm; vertical-align: top; }
+  table.limits-table td:first-child { width: 30mm; font-weight: 700; }
+
+  /* Further reading */
+  ul.ref-list { list-style: none; margin: 0 0 5mm 0; padding: 0; }
+  ul.ref-list li { margin-bottom: 2.8mm; }
+  ul.ref-list a { color: #2563eb; font-weight: 700; text-decoration: none; font-size: 9.5pt; }
+  ul.ref-list .ref-url { display: block; font-size: 7.3pt; color: #9aa0a8; font-family: monospace; margin-top: 0.5mm; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="badge">PLUGIN · v0.1.0</div>
+  <h1>Exposure Audit</h1>
+  <div class="subtitle">Instruction Manual</div>
+  <p class="meta-line">A scheduled, multi-agent Claude plugin that finds oversharing and misplaced sensitive content across Microsoft 365 (SharePoint / OneDrive / Teams) and Google Workspace (Drive / Gmail) — before someone else's AI agent finds it first.</p>
+</div>
+
+<!-- OVERVIEW -->
+<div class="new-page"></div>
+<h2>Why This Exists</h2>
+<p>Companies are connecting increasingly capable AI agents — including Claude — to SharePoint and Google Drive. Neither platform's storage model is well understood by most employees: SharePoint, Teams Files, and OneDrive are the same underlying storage with different ownership models, and people routinely misjudge who can see what they upload.</p>
+<p>A more capable search agent doesn't create that oversharing. It makes previously-obscure oversharing far easier to actually find — including by people who shouldn't find it. This plugin proactively finds that exposure first, so an organization's own IT or security team can fix it before anyone else does.</p>
+<div class="callout">
+  <div class="callout-title">Scope, on purpose</div>
+  <p>This is not a tool for hunting company-specific secrets. It looks for generic categories of sensitive content — the kind that would matter to any organization — and ranks locations by how exposed they are, not by what one particular company considers proprietary.</p>
+</div>
+
+<h3>The pipeline at a glance</h3>
+<div class="pipeline-glance">
+  <div class="pg-step">
+    <div class="pg-num">1</div>
+    <div class="pg-name">Discovery &amp; Exposure Mapping</div>
+    <div class="pg-desc">Finds where content lives and how broadly it's shared, or whether it's stranded in personal storage.</div>
+    <div class="pg-tag">Daily / weekly</div>
+  </div>
+  <div class="pg-arrow">&rarr;</div>
+  <div class="pg-step">
+    <div class="pg-num">2</div>
+    <div class="pg-name">Sensitivity Classifier</div>
+    <div class="pg-desc">Checks existing labels first, then judges how sensitive each flagged item actually is.</div>
+    <div class="pg-tag">On the delta</div>
+  </div>
+  <div class="pg-arrow">&rarr;</div>
+  <div class="pg-step">
+    <div class="pg-num">3</div>
+    <div class="pg-name">Risk Scoring &amp; Reporting</div>
+    <div class="pg-desc">Combines exposure and sensitivity into one prioritized digest for a human to read.</div>
+    <div class="pg-tag">Per run</div>
+  </div>
+  <div class="pg-arrow">&rarr;</div>
+  <div class="pg-step">
+    <div class="pg-num">4</div>
+    <div class="pg-name">Remediation Assist</div>
+    <div class="pg-desc">Drafts a fix for one finding a human selects. Never acts on its own.</div>
+    <div class="pg-tag">On request only</div>
+  </div>
+</div>
+<p class="meta-line">Stages 1–3 run automatically, in sequence, on a schedule. Stage 4 only ever runs when a person picks a specific finding and asks for a fix — that is a deliberate design choice, not a missing feature (see page on Remediation Assist). The diagram below places these same four stages inside the full data-flow and guardrail context.</p>
+
+<!-- ARCHITECTURE -->
+<h2>System Architecture</h2>
+<p>The same pipeline runs against either ecosystem through one shared adapter layer — the two platforms are not treated as interchangeable, since they genuinely behave differently (see the limitations table later in this manual).</p>
+
+<div class="diagram-wrap">
+  <div class="arch-sources-block">
+    <div class="arch-sources">
+      <div class="arch-src">Microsoft 365<span class="sub">SharePoint · OneDrive · Teams</span></div>
+      <div class="arch-src">Google Workspace<span class="sub">Drive · Gmail</span></div>
+      <div class="arch-src dashed">+ Box · Egnyte · Dropbox<span class="sub">future adapters</span></div>
+    </div>
+    <div class="arch-arrow">&darr;</div>
+    <div class="arch-adapter">Platform Adapter Layer<span class="sub">search · permissions · read content · owner — one interface, many backends</span></div>
+  </div>
+  <div class="arch-arrow">&darr;</div>
+  <div class="arch-main">
+    <div class="arch-pipeline">
+      <div class="arch-skill">1 &middot; Discovery &amp; Exposure Mapping<span class="sub">Metadata only &middot; ranks locations by exposure breadth</span></div>
+      <div class="arch-skill-arrow">&darr;</div>
+      <div class="arch-skill">2 &middot; Sensitivity Classifier — label-aware<span class="sub">No label &rarr; full read &middot; label present &rarr; mismatch check</span></div>
+      <div class="arch-skill-arrow">&darr;</div>
+      <div class="arch-skill">3 &middot; Risk Scoring &amp; Reporting<span class="sub">Exposure &times; sensitivity &times; mismatch &rarr; prioritized digest</span></div>
+      <div class="arch-skill-arrow">&darr;</div>
+      <div class="arch-skill dashed">4 &middot; Remediation Assist (human-gated)<span class="sub">Drafts a fix &middot; never auto-runs</span></div>
+    </div>
+    <div class="arch-guard">
+      <div class="arch-guard-title">Guardrails<span class="sub">always-on, cross-cutting — not scored by the automation legend below</span></div>
+      <ul>
+        <li>Own audit log (Cowork's own logs don't capture this)</li>
+        <li>Scope allowlist, never blanket access</li>
+        <li>Rate-limited subagent fan-out to control cost</li>
+        <li>Redacted, minimal-quote reporting</li>
+      </ul>
+    </div>
+  </div>
+  <div class="arch-arrow">&darr;</div>
+  <div class="arch-recipient">IT / Security / Compliance<span class="sub">reviews the digest, approves any fix</span></div>
+  <div class="arch-legend">— solid border = fully automated &nbsp;&nbsp; &#9478; dashed border = requires human approval</div>
+</div>
+
+<!-- SKILLS DETAIL -->
+<h2>What Each Skill Does</h2>
+
+<table class="skills-grid">
+  <tr>
+    <td class="skill-card">
+      <span class="sc-num">1</span><h3>Discovery &amp; Exposure Mapping</h3>
+      <div class="sc-purpose">Cheap, metadata-only pass across both platforms. Ranks locations by exposure breadth so the expensive stage (2) knows where to spend effort.</div>
+      <div class="sc-row"><b>Input:</b> connected platform(s), site/drive list</div>
+      <div class="sc-row"><b>Key logic:</b> one <i>discovery-scanner</i> subagent per site/drive, in parallel; flags both <i>broad/external</i> sharing and <i>misplaced</i> business content in personal storage</div>
+      <div class="sc-row"><b>Output:</b> ranked candidate list</div>
+      <div class="sc-tag">Multi-agent · fans out</div>
+    </td>
+    <td class="skill-card">
+      <span class="sc-num">2</span><h3>Sensitivity Classifier</h3>
+      <div class="sc-purpose">Determines how sensitive each candidate really is — without blindly trusting labels or blindly re-reading everything.</div>
+      <div class="sc-row"><b>Input:</b> ranked candidate list from Skill 1</div>
+      <div class="sc-row"><b>Key logic:</b> one <i>sensitivity-classifier-worker</i> subagent per batch; label-first branch (see diagram, next page)</div>
+      <div class="sc-row"><b>Output:</b> sensitivity level, confidence, mismatch flag</div>
+      <div class="sc-tag">Multi-agent · fans out</div>
+    </td>
+  </tr>
+  <tr>
+    <td class="skill-card">
+      <span class="sc-num">3</span><h3>Risk Scoring &amp; Reporting</h3>
+      <div class="sc-purpose">Pure synthesis — combines exposure and sensitivity into one coherent, prioritized view. No subagents; one view needs one author.</div>
+      <div class="sc-row"><b>Input:</b> outputs of Skills 1 &amp; 2</div>
+      <div class="sc-row"><b>Key logic:</b> scores Critical &rarr; High &rarr; Medium &rarr; Low; always includes a "what we couldn't verify" section</div>
+      <div class="sc-row"><b>Output:</b> prioritized digest / artifact</div>
+      <div class="sc-tag">Single pass · no fan-out</div>
+    </td>
+    <td class="skill-card gated">
+      <span class="sc-num">4</span><h3>Remediation Assist</h3>
+      <div class="sc-purpose">Drafts one fix for one finding a human explicitly selects. Never runs automatically, never batches, never sends/applies anything itself.</div>
+      <div class="sc-row"><b>Input:</b> one finding, chosen by a person</div>
+      <div class="sc-row"><b>Key logic:</b> drafts an owner notice, a label suggestion, or a permission-change suggestion — always a draft, never an action</div>
+      <div class="sc-row"><b>Output:</b> a draft, for a human to send</div>
+      <div class="sc-tag">Human-gated · on request only</div>
+    </td>
+  </tr>
+</table>
+
+<h3>Inside Skill 2: the label-aware branch</h3>
+<p>Both Microsoft 365 and Google Workspace already have native sensitivity-tagging systems, but audits of real tenants repeatedly find fewer than 15% of documents actually labeled. So Skill 2 checks for a label first, then does different work depending on what it finds:</p>
+
+<div class="branch-wrap">
+  <div class="branch-box">File + exposure rank <span class="sub">from Skill 1</span></div>
+  <div class="arch-arrow" style="font-size:9pt;">&darr;</div>
+  <div class="branch-box branch-decision">Existing sensitivity label on file?</div>
+  <div class="branch-row">
+    <div class="branch-col">
+      <div class="branch-fork">&darr; No</div>
+      <div class="branch-box branch-tag">No label (&asymp;85% of files)</div>
+      <div class="branch-box">Full content read<span class="sub">generic taxonomy: PII, credentials, financial, HR, legal, health</span></div>
+    </div>
+    <div class="branch-col">
+      <div class="branch-fork">&darr; Yes</div>
+      <div class="branch-box branch-tag">Label present (&asymp;15%)</div>
+      <div class="branch-box">Spot-check vs. declared label<span class="sub">does content plausibly match? flag mismatch</span></div>
+    </div>
+  </div>
+  <div class="branch-merge">&darr; both paths converge &darr;</div>
+  <div class="branch-box branch-final">Unified finding<span class="sub">sensitivity level &middot; confidence &middot; mismatch flag &middot; minimal evidence &rarr; Skill 3</span></div>
+</div>
+
+<!-- SETUP -->
+<h2>Setup</h2>
+<p>Connect at least one of: a Microsoft 365 connector (SharePoint search) or a Google Workspace connector (Drive search + permissions). Both together is stronger than either alone, since the two platforms cover different parts of a typical company's storage — and, as the limitations below explain, they give this plugin different quality of signal.</p>
+<p>To run unattended, wire the <code>/scan-oversharing</code> command to a scheduled task. Run it manually first to confirm the connectors and scope are set up the way you expect.</p>
+<p class="meta-line">Forgotten what this plugin is for, or whether it's the right tool for something? Just ask — questions like "should I use this for X" or "what are its limits" trigger the bundled <code>plugin-guide</code> skill, which answers conversationally without you needing to reopen this manual.</p>
+
+<h2>Known Limitations — Read Before Relying On This</h2>
+<table class="limits-table">
+  <tr><td>MS365 permissions</td><td>The current SharePoint connector cannot read real sharing/permission metadata. Discovery falls back to a location heuristic (shared library vs. personal OneDrive) — a reasonable proxy, not a measurement. The ground truth requires SharePoint Admin Center's Data Access Governance reports or the Graph <code>/permissions</code> API with admin consent.</td></tr>
+  <tr><td>Google Workspace permissions</td><td>Real measurement, not an inference — the connector reads actual sharing scope directly. Don't treat the two platforms' outputs as equally precise.</td></tr>
+  <tr><td>Scope</td><td>The connector uses the logged-in user's own delegated access, not a service account. One person's scan covers their own reachable slice of the tenant, not necessarily the whole organization.</td></tr>
+  <tr><td>Audit trail</td><td>The bundled audit-log hook is best-effort, not compliance-grade. It does not replace SOC&nbsp;2 / HIPAA-grade logging, and Cowork's own audit logs don't currently capture this kind of scheduled agent work either.</td></tr>
+  <tr><td>Cost</td><td>Multi-agent fan-out costs meaningfully more tokens than a single-threaded scan. Each skill bounds its own parallelism deliberately rather than maximizing concurrency.</td></tr>
+</table>
+
+<h2>Design Principles</h2>
+<div class="callout good">
+  <div class="callout-title">Report, never auto-remediate</div>
+  <p>Every write-type action is a draft a human explicitly approves. A scheduled agent that reads files and acts unattended is exactly the shape of a known prompt-injection attack pattern — this plugin is built to never look like one.</p>
+</div>
+<div class="callout">
+  <div class="callout-title">Two exposure patterns, not one</div>
+  <p>Classic oversharing (too many people can see it) and misplacement (too few systems protect it — business-critical content stranded in someone's personal storage, gone the day they leave).</p>
+</div>
+<div class="callout">
+  <div class="callout-title">Label-aware, not blind</div>
+  <p>Check for an existing sensitivity label before doing an expensive full content read, and treat a mismatched label as its own high-value finding rather than folding it into a generic "sensitive" bucket.</p>
+</div>
+
+<h2>Further Reading</h2>
+<p>Official documentation this plugin's design leans on — useful for verifying a finding by hand, or for tightening the underlying platform's own controls rather than just detecting the gap.</p>
+
+<h3>Microsoft 365 / Purview</h3>
+<ul class="ref-list">
+  <li><a href="https://learn.microsoft.com/en-us/purview/sensitivity-labels">Learn about sensitivity labels</a><span class="ref-url">learn.microsoft.com/en-us/purview/sensitivity-labels</span></li>
+  <li><a href="https://learn.microsoft.com/en-us/purview/sensitivity-labels-sharepoint-onedrive-files">Enable sensitivity labels for SharePoint and OneDrive files</a><span class="ref-url">learn.microsoft.com/en-us/purview/sensitivity-labels-sharepoint-onedrive-files</span></li>
+  <li><a href="https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports">Data access governance reports for SharePoint sites — the real oversharing/permission snapshot this plugin's MS365 side can only infer</a><span class="ref-url">learn.microsoft.com/en-us/sharepoint/data-access-governance-reports</span></li>
+  <li><a href="https://learn.microsoft.com/en-us/graph/api/driveitem-list-permissions?view=graph-rest-1.0">Microsoft Graph — list a DriveItem's real permissions</a><span class="ref-url">learn.microsoft.com/en-us/graph/api/driveitem-list-permissions</span></li>
+</ul>
+
+<h3>Google Workspace</h3>
+<ul class="ref-list">
+  <li><a href="https://knowledge.workspace.google.com/admin/security/about-dlp">About data loss prevention (DLP) for Drive</a><span class="ref-url">knowledge.workspace.google.com/admin/security/about-dlp</span></li>
+  <li><a href="https://knowledge.workspace.google.com/admin/security/create-classification-labels-for-your-organization">Create classification labels for your organization</a><span class="ref-url">knowledge.workspace.google.com/admin/security/create-classification-labels-for-your-organization</span></li>
+  <li><a href="https://knowledge.workspace.google.com/admin/security/apply-classification-labels-to-drive-files-automatically-with-dlp-rules">Apply classification labels to Drive files automatically with DLP rules</a><span class="ref-url">knowledge.workspace.google.com/admin/security/apply-classification-labels-to-drive-files-automatically-with-dlp-rules</span></li>
+</ul>
+
+<h3>Vendor-neutral</h3>
+<ul class="ref-list">
+  <li><a href="https://www.nccoe.nist.gov/data-classification">NIST SP 1800-39 — Data Classification Practices</a><span class="ref-url">nccoe.nist.gov/data-classification</span></li>
+</ul>
+
+</body>
+</html>

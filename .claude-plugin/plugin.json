@@ -1,0 +1,10 @@
+{
+  "name": "exposure-audit",
+  "version": "0.1.0",
+  "description": "Scheduled, multi-agent detection of oversharing and misplaced sensitive content across Microsoft 365 (SharePoint/OneDrive/Teams) and Google Workspace (Drive/Gmail)",
+  "author": {
+    "name": "Gergő Lencsés"
+  },
+  "license": "MIT",
+  "keywords": ["security", "compliance", "dspm", "oversharing", "sharepoint", "google-workspace", "data-governance"]
+}

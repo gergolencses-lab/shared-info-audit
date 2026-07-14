@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "lencses-plugins",
+  "description": "Claude Code / Cowork plugins by Gergő Lencsés",
+  "owner": {
+    "name": "Gergő Lencsés"
+  },
+  "plugins": [
+    {
+      "name": "exposure-audit",
+      "source": "./",
+      "description": "Scheduled, multi-agent detection of oversharing and misplaced sensitive content across Microsoft 365 (SharePoint/OneDrive/Teams) and Google Workspace (Drive/Gmail)",
+      "category": "security"
+    }
+  ]
+}
